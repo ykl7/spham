@@ -71,8 +71,15 @@ def main():
 	message_train, message_test, label_train, label_test = train_test_split(data['message'],data['label'],test_size=0.1)
 
 	try:
-		spam_detector = build_naive_bayes_classifier(message_train, message_test, label_train, label_test)
+		try:
+			spam_detector = cPickle.load(open("naive_bayes_spam_detector.pkl", "r"))
+		except:
+			spam_detector = build_naive_bayes_classifier(message_train, message_test, label_train, label_test)
+		
 		# make_prediction(spam_detector, test_array)
+
+		with open("naive_bayes_spam_detector.pkl", "wb") as detector:
+			cPickle.dump(spam_detector, detector)
 
 	except Exception as e:
 		print e
